@@ -13,7 +13,7 @@ async function handleGenerateNewShortURL(req,res) {
         visitHistory:[]
     })
 
-    res.json({newURL:shortId});
+    res.json({newURL:`http://localhost:8001/url/${shortId}`});
 }
 async function handleIncrement(req,res) {
     const shortId=req.params.shortId;
@@ -30,4 +30,20 @@ async function handleIncrement(req,res) {
 )
 res.redirect(entry.redirectURL);
 }
-module.exports={handleGenerateNewShortURL,handleIncrement}
+
+async function handleAllURLS(req, res) {
+    try {
+        const allUrls = await URL.find();
+
+        return res.status(200).json({
+            allUrls,
+        });
+    } catch (err) {
+        console.error(err);
+
+        return res.status(500).json({
+            error: "Internal Server Error",
+        });
+    }
+}
+module.exports={handleGenerateNewShortURL,handleIncrement,handleAllURLS}
