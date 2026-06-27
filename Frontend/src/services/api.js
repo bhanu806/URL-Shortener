@@ -1,10 +1,10 @@
 import axios from "axios";
-
+import api from "./axiosinstances";
 async function createShortURL(url) {
     if (!url) throw new Error("URL needed");
 
     try {
-        const res = await axios.post("http://localhost:8001/url", {
+        const res = await api.post("http://localhost:8001/url", {
             url,
         });
 
@@ -17,7 +17,7 @@ async function createShortURL(url) {
 
 async function getAllUrls() {
     try{
-        const res=await axios.get("http://localhost:8001/url");
+        const res=await api.get("http://localhost:8001/url");
         return res.data;
     }
     catch(err){

@@ -1,8 +1,33 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { handleUserLogIn } from "../services/userapi";
+
 function Login() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const navigate = useNavigate();
+
+    async function handleLogin(e) {
+        e.preventDefault();
+
+        try {
+            
+            const response = await handleUserLogIn(email, password);
+            navigate("/");
+        } catch (error) {
+            console.log(error);
+            alert(
+                error.response?.data?.message ||
+                "Invalid email or password"
+            );
+        }
+    }
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
-
                 <h1 className="text-3xl font-bold text-center mb-2">
                     Welcome Back
                 </h1>
@@ -11,7 +36,7 @@ function Login() {
                     Login to your account
                 </p>
 
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={handleLogin}>
                     <div>
                         <label
                             htmlFor="email"
@@ -19,11 +44,15 @@ function Login() {
                         >
                             Email
                         </label>
+
                         <input
                             type="email"
                             id="email"
-                            name="email"
                             placeholder="Enter your email"
+                            value={email}
+                            onChange={(e) =>
+                                setEmail(e.target.value)
+                            }
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
@@ -35,11 +64,15 @@ function Login() {
                         >
                             Password
                         </label>
+
                         <input
                             type="password"
                             id="password"
-                            name="password"
                             placeholder="Enter your password"
+                            value={password}
+                            onChange={(e) =>
+                                setPassword(e.target.value)
+                            }
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
@@ -61,25 +94,8 @@ function Login() {
                     </button>
                 </form>
 
-                <div className="flex items-center my-6">
-                    <hr className="grow border-gray-300" />
-                    <span className="px-3 text-gray-500 text-sm">OR</span>
-                    <hr className="grow border-gray-300" />
-                </div>
-
-                <button
-                    className="w-full flex items-center justify-center gap-3 border py-2 rounded-lg hover:bg-gray-50 transition"
-                >
-                    <img
-                        src="https://www.svgrepo.com/show/475656/google-color.svg"
-                        alt="Google"
-                        className="w-5 h-5"
-                    />
-                    Continue with Google
-                </button>
-
                 <p className="text-center text-sm text-gray-600 mt-6">
-                    Don't have an account?{""}
+                    Don't have an account?{" "}
                     <a
                         href="/signup"
                         className="text-blue-600 hover:underline"
@@ -87,7 +103,6 @@ function Login() {
                         Sign Up
                     </a>
                 </p>
-
             </div>
         </div>
     );

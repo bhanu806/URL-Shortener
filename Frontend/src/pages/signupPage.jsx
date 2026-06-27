@@ -1,4 +1,25 @@
+import { useNavigate } from "react-router-dom";
+import { handleUserSignup } from "../services/userapi";
+import { useState } from "react";
+
 function SignUp() {
+const [name,setName]=useState("");
+const [email,setEmail]=useState("");
+const [password,setPassword]=useState("");
+const navigate=useNavigate();
+async function handleSignUp() {
+    try{
+        await handleUserSignup(name,email,password);
+        navigate('/')
+    }
+    catch(err){
+       console.log(err);
+            alert(
+                err.response?.data?.message ||
+                "Invalid email or password"
+            );
+    }
+}
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
@@ -11,7 +32,11 @@ function SignUp() {
                     Sign up to get started
                 </p>
 
-                <form className="space-y-4">
+                <form className="space-y-4"
+                        onSubmit={(e)=>{
+                            e.preventDefault();
+                            handleSignUp();
+                        }}>
                     <div>
                         <label
                             htmlFor="username"
@@ -25,6 +50,8 @@ function SignUp() {
                             name="username"
                             placeholder="Enter username"
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={name}
+                            onChange={(e)=>setName(e.target.value)}
                         />
                     </div>
 
@@ -41,6 +68,8 @@ function SignUp() {
                             name="email"
                             placeholder="Enter email"
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={email}
+                            onChange={(e)=>setEmail(e.target.value)}
                         />
                     </div>
 
@@ -57,6 +86,8 @@ function SignUp() {
                             name="password"
                             placeholder="Enter password"
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={password}
+                            onChange={(e)=>setPassword(e.target.value)}
                         />
                     </div>
 

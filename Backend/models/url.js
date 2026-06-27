@@ -17,7 +17,11 @@ const urlSchema=mongoose.Schema({
                 type:Number
             }
         }
-    ]
+    ],
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User"
+    }
 },{timestamps:true})
 
 const URL=mongoose.model("Url",urlSchema);
